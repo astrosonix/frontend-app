@@ -11,11 +11,13 @@ import {
     RotateCounterClockwiseIcon
 } from '@radix-ui/react-icons'
 import styles from './styles/PlayerPage.module.css'
+import {createImageSequenceImageUrl, predefinedImageSequences} from "../../data/predefinedImageSequences.ts";
 
 const directions = [
     {
         label: 'To right',
-        icon: ArrowRightIcon
+        icon: ArrowRightIcon,
+        iconClassName: 'text-primary'
     },
     {
         label: 'To left',
@@ -30,12 +32,12 @@ const directions = [
         icon: ArrowDownIcon
     },
     {
-        label: 'Rotate clockwise',
+        label: 'Clockwise',
         icon: RotateCounterClockwiseIcon,
-        iconClassName: 'transform rotate-180'
+        iconClassName: 'transform'
     },
     {
-        label: 'Rotate anticlockwise',
+        label: 'Counterclockwise',
         icon: RotateCounterClockwiseIcon
     },
 ]
@@ -43,9 +45,34 @@ const directions = [
 const PlayerPage = () => {
     const waveSurferRef = useRef<WaveSurfer>()
     const playerContainerRef = useRef<HTMLDivElement>(null)
+    const overlaysSliderRef = useRef<HTMLDivElement>(null)
     const [isPlaying, setIsPlaying] = useState(false)
+    const [currentImageProgress, setCurrentImageProgress] = useState(0)
+    const currentImageSequence = predefinedImageSequences[0]
+    let rangeToImageMapping = [
+        {
+            start: 0,
+            end: 5,
+            imageUrl: createImageSequenceImageUrl(currentImageSequence, 1)
+        },
+        {
+            start: 5,
+            end: 8,
+            imageUrl: createImageSequenceImageUrl(currentImageSequence, 2)
+        },
+        {
+            start: 8,
+            end: 12,
+            imageUrl: createImageSequenceImageUrl(currentImageSequence, 3)
+        }
+    ]
+    rangeToImageMapping = rangeToImageMapping.reverse()
 
-    const imageSrc = '/assets/img/base-imagery/nasa-sample-image.png'
+    const [currentRange, setCurrentRange] = useState(rangeToImageMapping[0])
+
+
+    const imageSrc = currentRange.imageUrl
+
 
     useLayoutEffect(() => {
         if(!waveSurferRef.current) {
@@ -57,6 +84,18 @@ const PlayerPage = () => {
             })
             waveSurferRef.current?.on('play', () => setIsPlaying(true))
             waveSurferRef.current?.on('pause', () => setIsPlaying(false))
+            waveSurferRef.current?.on('timeupdate', (currentTime) => {
+               const newRange = rangeToImageMapping.find(r => currentTime >= r.start)
+                if(newRange) {
+                    setCurrentRange(newRange)
+                    // console.log((currentTime - r.start) / (r.end - r.start) * 100)
+                    setCurrentImageProgress((currentTime - newRange.start) / (newRange.end - newRange.start) * 100)
+                }
+            })
+            window.addEventListener('keyup', e => {
+                if(e.code === 'Space' && waveSurferRef.current)
+                    waveSurferRef.current?.playPause()
+            })
         }
     }, [])
     const handlePlayPause = () => {
@@ -79,10 +118,19 @@ const PlayerPage = () => {
             }}>
            <div className="h-screen md:h-full md:col-span-3 flex flex-col">
                 <div className="mt-20">
-                    <img
-                        src={imageSrc}
-                        alt=""
-                        className="rounded aspect-video md:w-1/2 mx-auto"/>
+                    <div className="relative aspect-video md:w-3/4 mx-auto overflow-hidden">
+                        <div
+                            style={{
+                                left: `${currentImageProgress}%`,
+                                backdropFilter: 'blur(5px)'
+                            }}
+                            className="w-[2px] bg-white/30 h-full absolute z-10 transition"></div>
+                        <img
+                            src={imageSrc}
+                            alt=""
+                            className="rounded"/>
+                    </div>
+
                 </div>
                <div className="w-4/5 mx-auto mt-20">
                    <div className="px-10 py-5 bg-dark/20 rounded-lg">
@@ -114,15 +162,15 @@ const PlayerPage = () => {
             <div className="bg-dark/20 border-l border-primary/20 px-5 py-10 md:col-span-2">
                 <div className="md:w-3/4 mx-auto">
                     <span className="text-xl text-center block">Additional settings</span>
-                    <span className="mt-5 text-lg text-center block text-white/80">Parsing direction</span>
+                    <span className="mt-5 text-lg text-center block text-white/80">Heuristic overlays direction</span>
                     <div className="mt-5 grid grid-cols-2 gap-5">
                         {
                             directions.map(({icon: DirectionIcon, iconClassName, label}) => (
                                 <div className="">
                                     <div className="flex items-center justify-center">
-                                        <button className="w-10 h-10 flex items-center justify-center border rounded border-white/30" type="button">
+                                        <button type="button" disabled className="cursor-not-allowed w-12 h-12 flex items-center justify-center border rounded border-white/30" type="button">
                                     <span className="flex items-center justify-center">
-                                        <DirectionIcon className={`w-8 h-8 text-white/80 ${iconClassName ? iconClassName : ''}`} />
+                                        <DirectionIcon className={`w-10 h-10 text-white/80 ${iconClassName ? iconClassName : ''}`} />
                                     </span>
                                         </button>
                                     </div>
@@ -139,10 +187,11 @@ const PlayerPage = () => {
                         {new Array(6).fill(null).map(() => (
                             <div className="flex justify-center">
                                 <Slider.Root
-                                    className="relative flex items-center select-none touch-none w-1 h-20"
+                                    className="relative flex items-center select-none touch-none w-1 h-20 cursor-not-allowed"
                                     defaultValue={[50]}
                                     max={100}
                                     step={1}
+                                    disabled
                                     orientation="vertical"
                                 >
                                     <Slider.Track className="bg-gray-600 relative grow rounded-full w-[3px] h-full">

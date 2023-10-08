@@ -10,9 +10,6 @@ const SourceHeading = () => (
     </div>
 )
 
-const createBaseImageUrl = (filepath: string) => {
-    return `/assets/img/base-imagery/${filepath}`
-}
 
 
 const ImageSourceSelectionPage = () => {
@@ -20,23 +17,24 @@ const ImageSourceSelectionPage = () => {
     return (
         <div className="w-4/5 mx-auto pt-20 pb-20 md:pb-0">
             <h1 className="font-primary text-center text-2xl mb-5">Hi 👋, <br/> what image you wish to sonify?</h1>
-            <div className="my-10 md:flex justify-center transform md:translate-x-[4ch]">
+            <div className="my-10 md:flex justify-center">
                 <div className="flex justify-center">
-                    <button type="button" className="text-lg text-center flex items-center">
+                    <button disabled={true} type="button" className="cursor-not-allowed text-lg text-center flex items-center">
                         <UploadIcon className="w-5 h-5 mr-2" />
-                        Upload your image
+                        Upload your image sequence
                     </button>
-                </div>
-                <span className="block md:flex h-full items-center mx-10 text-center my-5 md:my-0">or</span>
-                <div className="flex justify-center">
-                    <input type="text"
-                           placeholder="Paste image URL"
-                           className="bg-transparent border-b border-gray-700 mx-10 w-full md:w-[20ch]"/>
                 </div>
             </div>
 
-            <h3 className="text-lg text-center my-5">or select image from NASA archives</h3>
+            <h3 className="text-lg text-center mt-5 mb-20 block font-bold">or select an image sequence from NASA datasets</h3>
             <ImagesGrid control={control}/>
+            <div className="mb-10 mt-16">
+                <h3 className="text-lg text-center mt-5 mb-5 block font-bold">How many images should be extracted from the sequence?</h3>
+                <div className="flex justify-center">
+                    <input type="text" value="3"
+                           className="bg-transparent border-gray-600 border inline-block px-3 py-1 block text-center w-[10ch] rounded cursor-not-allowed"/>
+                </div>
+            </div>
             <div className="flex justify-center mt-10">
                 <Link to="/app/sound-style" state={{}} className="px-5 font-primary text-lg">Next {'>'}</Link>
             </div>

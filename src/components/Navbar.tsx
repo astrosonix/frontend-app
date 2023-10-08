@@ -31,7 +31,7 @@ const Navbar = () => {
                 "bg-dark md:bg-transparent",
                 getNavClassName(pathname)
             ].join(' ')}>
-            <Link to="/" className="font-primary bg-dark px-5 py-1">
+            <Link to="/" className="font-primary text-lg bg-dark px-5 py-1">
                 AstroSonix
             </Link>
             <div className={getRightPaneClassName(pathname)}>
