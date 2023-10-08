@@ -1,0 +1,17 @@
+@keyframes rotating {
+    from {
+        transform: rotate(0deg) scale(250%);
+    }
+    to {
+        transform: rotate(360deg) scale(250%);
+    }
+}
+
+.musicBg {
+    transform: scale(200%);
+}
+
+.rotatingMusicBg {
+    animation-fill-mode: forwards;
+    animation: rotating 5s linear infinite;
+}
