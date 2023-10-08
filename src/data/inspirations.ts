@@ -99,11 +99,6 @@ export interface ComposerInspiration {
 
 export const composerInspirations: ComposerInspiration[] = [
     {
-        name: "Hans Zimmer",
-        imagePath: "hanszimmer.jpg",
-        slug: "hans_zimmer"
-    },
-    {
         name: "Ennio Morricone",
         imagePath: "enniomorricone.jpg",
         slug: "ennio_morricone"
@@ -132,6 +127,11 @@ export const composerInspirations: ComposerInspiration[] = [
         name: "Pyotr Ilyich Tchaikovsky",
         imagePath: "pyotrilyichtchaikovsky.jpg",
         slug: "pyotr_ilyich_tchaikovsky"
+    },
+    {
+        name: "Hans Zimmer",
+        imagePath: "hanszimmer.jpg",
+        slug: "hans_zimmer"
     },
     {
         name: "Ludwig Göransson",

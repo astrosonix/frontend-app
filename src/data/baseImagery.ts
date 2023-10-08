@@ -46,9 +46,9 @@ export const baseImagery: BaseImage[] = [
         name: "Galaxy Messier 100"
     },
     {
-        imgPath: "PIA15803.jpg",
+        imgPath: "nasa-sample-image.png",
         tool: "Hubble Space Telescope",
-        name: "Galaxy Cluster and Giant Arc"
+        name: "Orion Nebula"
     },
     {
         imgPath: "PIA21087.jpg",

@@ -5,9 +5,22 @@ const links = [
     ['Features', '/#'],
 ]
 
+const getRightPaneClassName = (pathname) => {
+    if(pathname === '/app/player')
+        return  'hidden'
+    if(pathname !== '/')
+        return  'hidden md:flex'
+    return 'flex'
+}
+
+const getNavClassName = (pathname) => {
+    if(pathname !== '/')
+        return  'justify-between'
+    return 'justify-center md:justify-between md:bg-transparent'
+}
+
 const Navbar = () => {
     const {pathname} = useLocation()
-    console.log(pathname)
     return (
         <nav
             style={{
@@ -16,12 +29,12 @@ const Navbar = () => {
             className={[
                 "fixed top-0 left-0 w-full z-50 px-10 py-5 flex items-center",
                 "bg-dark md:bg-transparent",
-                pathname === '/' ? 'justify-between' : 'justify-center md:justify-between md:bg-transparent'
+                getNavClassName(pathname)
             ].join(' ')}>
             <Link to="/" className="font-primary bg-dark px-5 py-1">
                 AstroSonix
             </Link>
-            <div className={pathname !== '/' ? 'hidden md:flex' :'flex'}>
+            <div className={getRightPaneClassName(pathname)}>
                 <ul className="hidden md:flex items-center mr-5">
                     {links.map(([label, href]) => (
                         <li className="mx-5" key={href}>
