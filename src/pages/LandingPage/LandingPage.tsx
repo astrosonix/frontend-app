@@ -53,11 +53,6 @@ const LandingPage = () => (
                 </div>
             </div>
         </div>
-        <div className="py-20 h-[60vh]" id="algo">
-            <div className="w-4/5 mx-auto">
-                <h1 className="text-3xl font-primary">Meet our AstroSonix algorithm</h1>
-            </div>
-        </div>
     </>
 
 
